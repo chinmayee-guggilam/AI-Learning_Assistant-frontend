@@ -22,10 +22,11 @@ export default function ProfilePage() {
   const [picPreview, setPicPreview] = useState(null);
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = useDarkMode();
+  const API = process.env.REACT_APP_API_URL;
 
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/user/me", {
+    const res = await fetch(`${API}/api/user/me`, {
       headers: { Authorization: token },
     });
     const data = await res.json();
@@ -39,7 +40,7 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     const token = localStorage.getItem("token");
-    await fetch("http://localhost:5000/api/user/update", {
+    await fetch(`${API}/api/user/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +61,7 @@ export default function ProfilePage() {
     formData.append("profilePic", file);
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5000/api/user/upload-pic", {
+    const res = await fetch(`${API}/api/user/upload-pic`, {
       method: "POST",
       headers: { Authorization: token },
       body: formData,
@@ -126,7 +127,7 @@ export default function ProfilePage() {
             src={
               picPreview ||
               (user.profilePic
-                ? `http://localhost:5000${user.profilePic}`
+                ? `${API}${user.profilePic}`
                 : "https://api.dicebear.com/7.x/initials/svg?seed=User")
             }
             alt="Profile"

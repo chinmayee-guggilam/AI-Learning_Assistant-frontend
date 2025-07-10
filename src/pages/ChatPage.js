@@ -15,6 +15,7 @@ export default function ChatPage() {
   const [profile, setProfile] = useState(null);
   const [selectedSuggestion, setSelectedSuggestion] = useState(null);
   const [showNewChatModal, setShowNewChatModal] = useState(false);
+  const API = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,7 +26,7 @@ export default function ChatPage() {
 
   const fetchProfile = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch("http://localhost:5000/api/user/me", {
+  const res = await fetch(`${API}/api/user/me`, {
     headers: { Authorization: token },
   });
   const data = await res.json();
@@ -51,7 +52,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
   }
 
   // Auto-send first message to chatbot
-  await fetch("http://localhost:5000/api/save-chat", {
+  await fetch(`${API}/api/save-chat`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -61,7 +62,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
   });
 
   // Reload chat
-  const updated = await fetch(`http://localhost:5000/api/chat/${chatId}`, {
+  const updated = await fetch(`${API}/api/chat/${chatId}`, {
     headers: { Authorization: token },
   });
   const chatData = await updated.json();
@@ -71,7 +72,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
 
   const fetchChats = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/chat-history", {
+    const res = await fetch(`${API}/api/chat-history`, {
       headers: { Authorization: token },
     });
     const data = await res.json();
@@ -81,7 +82,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
   const renameChat = async (chatId, newName) => {
     const token = localStorage.getItem("token");
     try {
-      await fetch(`http://localhost:5000/api/rename-chat`, {
+      await fetch(`${API}/api/rename-chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,7 +117,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
   const token = localStorage.getItem("token");
 
   try {
-    const res = await fetch("http://localhost:5000/api/upload-pdf", {
+    const res = await fetch(`${API}/api/upload-pdf`, {
       method: "POST",
       headers: { Authorization: token },
       body: formData,
@@ -128,7 +129,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
     await fetchChats();
 
     if (newChatId) {
-      const updated = await fetch(`http://localhost:5000/api/chat/${newChatId}`, {
+      const updated = await fetch(`${API}/api/chat/${newChatId}`, {
         headers: { Authorization: token },
       });
       const chatData = await updated.json();
@@ -152,7 +153,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
 
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`http://localhost:5000/api/chat/${chatId}`, {
+      const res = await fetch(`${API}/api/chat/${chatId}`, {
         method: "DELETE",
         headers: { Authorization: token },
       });
@@ -177,7 +178,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
   setUploadStatus("Uploading...");
   const token = localStorage.getItem("token");
 
-  const res = await fetch("http://localhost:5000/api/content", {
+  const res = await fetch(`${API}/api/content`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -193,7 +194,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
   await fetchChats();
 
   if (newChatId) {
-    const updated = await fetch(`http://localhost:5000/api/chat/${newChatId}`, {
+    const updated = await fetch(`${API}/api/chat/${newChatId}`, {
       headers: { Authorization: token },
     });
     const chatData = await updated.json();
@@ -347,7 +348,7 @@ const triggerSuggestionAction = async (suggestion, chatId) => {
               <img
   src={
     profile?.profilePic
-      ? `http://localhost:5000${profile.profilePic}`
+      ? `${API}${profile.profilePic}`
       : "https://api.dicebear.com/7.x/initials/svg?seed=User"
   }
   alt="Profile"

@@ -7,11 +7,12 @@ export default function QuizPage() {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const API = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchQuiz = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/quiz/${id}`, {
+      const res = await fetch(`${API}/api/quiz/${id}`, {
         headers: { Authorization: token },
       });
       const data = await res.json();
@@ -30,7 +31,7 @@ export default function QuizPage() {
 
   try {
     const token = localStorage.getItem("token");
-    await fetch("http://localhost:5000/api/user/update-quiz", {
+    await fetch(`${API}/api/user/update-quiz`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
